@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Feed Scrapper</title>
+    <base href="http://localhost:3000">
+</head>
+<body>
+    <div class="error"></div>
+    <br>
+    <br>
+    <div>
+        <button id="twt-btn">Get Twitter Highlight</button>
+    </div>
+    <br>
+    <br>
+    <div>
+        <button id="db-query">Query the Database</button>
+    </div>
+    <div id="content"></div>
+    <script>
+        const twtBtn=document.getElementById('twt-btn');
+        const dbBtn=document.getElementById('db-query');
+        twtBtn.addEventListener('click',async()=>{
+            const res=await fetch('/run');
+            const data=await res.json();
+            localStorage.setItem('id',data.id);
+            printContent(data);
+        })
+
+
+        dbBtn.addEventListener('click',async()=>{
+            const id=localStorage.getItem('id');
+            if(!id){
+                const errDiv=document.querySelector('.error');
+                errDiv.textContent="nothing to fetch";
+                return;
+            }
+            const res=await fetch(`/query/${id}`);
+            const data=await res.json();
+            printContent(data);
+        })
+
+
+        function printContent(data){
+            const contentDiv=document.getElementById('content');
+            contentDiv.textContent="";
+            for(let key in data){
+                if(data[key] instanceof Array){
+                    for(let i=1;i<=data[key].length;i++){
+                        const p=document.createElement('p');
+                        p.textContent="Title"+i+" "+data[key][i-1].title;
+                        contentDiv.appendChild(p);
+                    }
+                }
+                else{
+                    const p=document.createElement('p');
+                    p.textContent=key+" "+data[key];
+                    contentDiv.appendChild(p);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
