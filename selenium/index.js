@@ -69,9 +69,13 @@ mongoose.connect(process.env.MONGO_URL).then(async() => {
 
         const res=await fetch('https://proxylist.geonode.com/api/proxy-list?protocols=http&limit=1&page=1&sort_by=lastChecked&sort_type=desc');
         const data=await res.json()
-        const ip=data.data[0].ip+":"+data.data[0].port;
-        
-        // options.addArguments(`--proxy-server=${ip}`);
+
+
+        const ip='us-ca.proxymesh.com:31280'
+
+        const url=`http://${process.env.PROXYMESH_USERNAME}:${process.env.PROXYMESH_PASSWORD}@${ip}`;
+
+        // options.addArguments(`--proxy-server=${url}`)
 
         let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
