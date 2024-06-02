@@ -46,7 +46,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd twitterScraper
+  cd twitterScraper/selenium
 ```
 
 Install dependencies
